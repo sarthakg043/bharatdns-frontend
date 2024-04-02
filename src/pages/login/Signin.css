@@ -1,0 +1,15 @@
+
+.cover-img{
+    height: 100%;
+}
+
+@media screen and (min-width: 1030px) {
+    .cover-img{
+        height: 100vh;
+    }
+}
+@media screen and (max-width: 1030px) {
+    .cover-img{
+        height: 100%;
+    }
+}
