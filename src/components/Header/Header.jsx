@@ -1,29 +1,43 @@
-'use client'
-
-import React from 'react'
-import { Menu, X } from 'lucide-react'
-import { Link } from "react-router-dom";
+"use client";
+import React from "react";
+import { Menu, X } from "lucide-react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { logout } from "../../firebase/authFunctions";
+import { useState } from "react";
 
 const menuItems = [
   {
-    name: 'Home',
-    href: '/',
+    name: "Home",
+    href: "/",
   },
-]
+];
 
 function Header() {
-  const [isMenuOpen, setIsMenuOpen] = React.useState(false)
+  const navigate = useNavigate();
+  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
   const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen)
-  }
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  const handleLogout = async (e) => {
+    e.preventDefault();
+    logout(navigate);
+  };
 
   return (
     <div className="relative w-full bg-black">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2 sm:px-6 lg:px-8">
         <div className="inline-flex items-center space-x-2">
           <span>
-            <img src='/transparent bg_Bharat_DNS.png' height={50} width={50} />
+            <Link to="/">
+              <img
+                src="/transparent bg_Bharat_DNS.png"
+                height={50}
+                width={50}
+                alt="Bharat DNS Logo"
+              />
+            </Link>
           </span>
           <span className="font-bold">Bharat DNS</span>
         </div>
@@ -31,26 +45,23 @@ function Header() {
           <ul className="inline-flex space-x-8">
             {menuItems.map((item) => (
               <li key={item.name}>
-                <span className='text-sm font-semibold text-gray-200 hover:text-gray-100'>
-                    <Link
-                    to={item.href}
-                    >
-                    {item.name}
-                    </Link>
+                <span className="text-sm font-semibold text-gray-200 hover:text-gray-100">
+                  <Link to={item.href}>{item.name}</Link>
                 </span>
               </li>
             ))}
           </ul>
         </div>
         <div className="hidden lg:block">
-            <div>
-                <button
-                type="button"
-                className="rounded-md bg-red-300 px-3 py-2 text-sm font-semibold text-red-800 shadow-sm hover:bg-red-300/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-                >
-                Logout
-                </button>
-            </div>
+          <div>
+            <button
+              type="button"
+              className="rounded-md bg-red-300 px-3 py-2 text-sm font-semibold text-red-800 shadow-sm hover:bg-red-300/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+              onClick={handleLogout}
+            >
+              Logout
+            </button>
+          </div>
         </div>
         <div className="lg:hidden">
           <Menu onClick={toggleMenu} className="h-6 w-6 cursor-pointer" />
@@ -61,10 +72,16 @@ function Header() {
               <div className="px-5 pb-6 pt-5">
                 <div className="flex items-center justify-between">
                   <div className="inline-flex items-center space-x-2">
-                    <span className='bg-black rounded-full '>
-                      <img src='/transparent bg_Bharat_DNS.png' height={50} width={50} />
+                    <span className="bg-black rounded-full ">
+                      <img
+                        src="/transparent bg_Bharat_DNS.png"
+                        height={50}
+                        width={50}
+                      />
                     </span>
-                    <span className="font-bold text-black text-xl">Bharat DNS</span>
+                    <span className="font-bold text-black text-xl">
+                      Bharat DNS
+                    </span>
                   </div>
                   <div className="-mr-2">
                     <button
@@ -92,13 +109,14 @@ function Header() {
                     ))}
                   </nav>
                 </div>
-                <div className=' flex justify-end align-bottom'>
-                    <button
+                <div className=" flex justify-end align-bottom">
+                  <button
                     type="button"
                     className="rounded-md bg-red-300 px-3 py-2 text-sm font-semibold text-red-800 shadow-sm hover:bg-red-300/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-                    >
+                    onClick={handleLogout}
+                  >
                     Logout
-                    </button>
+                  </button>
                 </div>
               </div>
             </div>
@@ -106,8 +124,7 @@ function Header() {
         )}
       </div>
     </div>
-  )
+  );
 }
-
 
 export default Header;
