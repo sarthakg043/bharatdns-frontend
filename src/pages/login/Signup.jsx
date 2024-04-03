@@ -1,19 +1,21 @@
 import React, {useState} from 'react'
 import { ArrowRight } from 'lucide-react'
-import { auth } from '../../firebase/firebase-config';
 import './Signin.css'
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { useAuth } from '../../contexts/authContext';
+import { Link, Navigate } from 'react-router-dom';
+import { doCreateUserWithEmaillAndPassword } from '../../firebase/auth';
 
 function Signup() {
+    const {userLoggedIn} = useAuth();
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('')
     const [userName, setUserName] = useState('')
     
     const logup = (e)=>{
         e.preventDefault();
-        createUserWithEmailAndPassword(auth, email, password)
+        doCreateUserWithEmaillAndPassword(email, password)
         .then((userCredential) => {
-        console.log(userCredential)
         })
         .catch((error) => {
         console.log(error)
@@ -24,21 +26,20 @@ function Signup() {
   return (
     <>
     <section>
+    {userLoggedIn && (<Navigate to={'/'} replace={true} />)}
       <div className="grid grid-cols-1 lg:grid-cols-2">
         <div className="flex items-center justify-center px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-24">
           <div className="xl:mx-auto xl:w-full xl:max-w-sm 2xl:max-w-md">
             <h2 className="text-3xl font-bold leading-tight text-white sm:text-4xl">Sign up</h2>
             {/* Use react Link for SignIn page */}
-						{/* <p className="mt-2 text-base text-gray-400">
+						<p className="mt-2 text-base text-gray-400">
               Already have an account?{' '}
-              <a
-                href="#"
-                title=""
-                className="font-medium text-white transition-all duration-200 hover:underline"
-              >
-                Sign In
-              </a>
-            </p> */}
+              <span className="font-medium text-white transition-all duration-200 hover:underline">
+                <Link to={'/signin'}>
+                  Sign In
+                </Link>
+              </span>
+            </p>
             <form onSubmit={logup} className="mt-8">
               <div className="space-y-5">
                 <div>
@@ -54,6 +55,7 @@ function Signup() {
 											id="name"
 											value={userName}
 											onChange={(e) => setUserName(e.target.value)}
+                      required
 										></input>
                   </div>
                 </div>
@@ -71,6 +73,7 @@ function Signup() {
 											placeholder='example@gmail.com'
 											value={email}
 											onChange={(e) => setEmail(e.target.value)}
+                      required
 										></input>
               		</div>
             		</div>
@@ -82,21 +85,29 @@ function Signup() {
                     </label>
                   </div>
                   <div className="mt-2">
+                  <ul className="list-disc pl-4 mb-4">
+                    <li className='ml-4'>Password must contain at least one uppercase letter</li>
+                    <li className='ml-4'>Password must contain at least one lowercase letter</li>
+                    <li className='ml-4'>Password must contain at least one number</li>
+                    <li className='ml-4'>Password must be at least 8 characters long</li>
+                  </ul>
 										<input
 											className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
 											type="password"
 											placeholder="Password"
 											id="password"
 											name='password'
+                      pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" 
 											value={password}
-											onChange={(e) => setPassword(password)}
+											onChange={(e) => setPassword(e.target.value)}
+                      required
 										></input>
                   </div>
                 </div>
               	<div>
                   <button
                     type="submit"
-                    className="inline-flex w-full items-center justify-center rounded-md bg-white px-3.5 py-2.5 font-semibold leading-7 text-black hover:bg-lime-500/80"
+                    className="inline-flex w-full items-center justify-center rounded-md bg-white px-3.5 py-2.5 font-semibold leading-7 text-black hover:bg-lime-500/80 hover:text-white"
                     >
                       Create Account <ArrowRight className="ml-2" size={16} />
                   </button>

@@ -3,7 +3,7 @@ import { ArrowRight } from 'lucide-react'
 import './Signin.css'
 import { doSignInWithEmaillAndPassword, doSignInWithGoogle } from '../../firebase/auth';
 import { useAuth } from '../../contexts/authContext';
-import { Navigate } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 
 
 function Signin() {
@@ -12,13 +12,19 @@ function Signin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('')
   const [isSigningIn, setIsSigningIn] = useState(false)
-  const [errorMessage, setErrorMessage] = useState('')
+  const [isInvalidUser, setIsInvalidUser] = useState(false)
   
   const login = async (e)=>{
     e.preventDefault();
     if(!isSigningIn){
       setIsSigningIn(true)
       await doSignInWithEmaillAndPassword(email, password)
+      .then(()=>{
+        setIsInvalidUser(false)
+      })
+      .catch((error) => {
+        setIsInvalidUser(true)
+      })
 
 
     }
@@ -46,16 +52,20 @@ function Signin() {
               <p className="mt-2 text-sm text-gray-300">
                 {/* React Link Tag must be used to go to Create account page */} 
                 Don&apos;t have an account?{' '}
-                <a
-                  href="#"
-                  title=""
-                  className="font-semibold text-white transition-all duration-200 hover:underline"
-                >
-                  Create a free account
-                </a>
+                <span className="font-semibold text-white transition-all duration-200 hover:underline">
+                  <Link to={'/signup'}>
+                    Create a free account
+                  </Link>
+                </span>
               </p>
               <form className="mt-8" onSubmit={login}>
                 <div className="space-y-5">
+                  {/* Invalid credentials Message */}
+                  {isInvalidUser ? (<>
+                    <div>
+                      <span className='text-red-900 bg-red-300/90 font-medium text-base px-5 py-2 rounded-md border-red-800 border-1'>Invalid Login Credentials</span>
+                    </div>
+                  </>): null}
                   <div>
                     <label htmlFor="emailInput" className="text-base font-medium text-gray-100">
                       {' '}
