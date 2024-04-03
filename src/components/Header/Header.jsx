@@ -2,8 +2,7 @@
 
 import React from 'react'
 import { Menu, X } from 'lucide-react'
-import { Link, Navigate } from "react-router-dom";
-import { auth } from '../../firebase/firebase-config';
+import { Link} from "react-router-dom";
 import { useAuth } from '../../contexts/authContext';
 import { doSignOut } from '../../firebase/auth';
 import { useNavigate } from 'react-router-dom';

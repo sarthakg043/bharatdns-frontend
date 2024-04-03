@@ -1,13 +1,11 @@
-import { useState } from 'react'
-
 import './App.css'
 import Signin from './pages/login/Signin'
 import Signup from './pages/login/Signup'
-import Database from './pages/database/database'
+import Database from './pages/database/Database'
 import Layout from './Layout'
 import { ErrorPage } from './pages/ErrorPage'
 
-import { Navigate, Route, RouterProvider, Routes, createBrowserRouter, createRoutesFromElements } from 'react-router-dom'
+import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from 'react-router-dom'
 import { AuthProvider } from './contexts/authContext'
 
 const router = createBrowserRouter(

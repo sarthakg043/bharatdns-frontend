@@ -1,9 +1,7 @@
-import { data } from 'autoprefixer';
 import React, { useState, useEffect } from 'react'
 import { GiNetworkBars } from "react-icons/gi";
 import {ref , onValue } from 'firebase/database' ;
-import { db, auth } from '../../firebase/firebase-config';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { db} from '../../firebase/firebase-config';
 
 function Database() {
   const [tableData, setTableData] = useState([]);
