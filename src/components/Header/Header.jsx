@@ -2,8 +2,11 @@
 
 import React from 'react'
 import { Menu, X } from 'lucide-react'
-import { Link } from "react-router-dom";
-
+import { Link, Navigate } from "react-router-dom";
+import { auth } from '../../firebase/firebase-config';
+import { useAuth } from '../../contexts/authContext';
+import { doSignOut } from '../../firebase/auth';
+import { useNavigate } from 'react-router-dom';
 const menuItems = [
   {
     name: 'Home',
@@ -13,10 +16,28 @@ const menuItems = [
 
 function Header() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false)
-
+  const {userLoggedIn} = useAuth();
+  console.log(userLoggedIn)
+  
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)
   }
+
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    try {
+      await doSignOut(); // Sign out the user
+      navigate('/signin'); // Redirect to the signing page
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
+  };
+  
+  const handleSignIn = async () => {
+    navigate('/signin')
+  };
+
 
   return (
     <div className="relative w-full bg-black">
@@ -43,14 +64,30 @@ function Header() {
           </ul>
         </div>
         <div className="hidden lg:block">
-            <div>
+            {(userLoggedIn) ? (
+              <>
+                <div className='flex justify-end align-bottom'>
+                  <button
+                    type="button"
+                    className="rounded-md bg-red-300 px-3 py-2 text-sm font-semibold text-red-800 shadow-sm hover:bg-red-300/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                    onClick={handleSignOut}
+                  >
+                    Logout
+                  </button>
+                </div>
+              </>
+            ) : <>
+              <div className='flex justify-end align-bottom'>
                 <button
-                type="button"
-                className="rounded-md bg-red-300 px-3 py-2 text-sm font-semibold text-red-800 shadow-sm hover:bg-red-300/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                  type="button"
+                  className="rounded-md bg-green-300 px-3 py-2 text-sm font-semibold text-green-800 shadow-sm hover:bg-green-300/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                  onClick={handleSignIn}
                 >
-                Logout
+                  Sign In
                 </button>
-            </div>
+              </div>
+            </>
+            }
         </div>
         <div className="lg:hidden">
           <Menu onClick={toggleMenu} className="h-6 w-6 cursor-pointer" />
@@ -92,14 +129,30 @@ function Header() {
                     ))}
                   </nav>
                 </div>
-                <div className=' flex justify-end align-bottom'>
-                    <button
+                {(userLoggedIn) ? (
+                  <>
+                    <div className='flex justify-end align-bottom'>
+                      <button
+                        type="button"
+                        className="rounded-md bg-red-300 px-3 py-2 text-sm font-semibold text-red-800 shadow-sm hover:bg-red-300/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                        onClick={handleSignOut}
+                      >
+                        Logout
+                      </button>
+                    </div>
+                  </>
+                ) : <>
+                <div className='flex justify-end align-bottom'>
+                  <button
                     type="button"
-                    className="rounded-md bg-red-300 px-3 py-2 text-sm font-semibold text-red-800 shadow-sm hover:bg-red-300/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-                    >
-                    Logout
-                    </button>
+                    className="rounded-md bg-green-300 px-3 py-2 text-sm font-semibold text-green-800 shadow-sm hover:bg-green-300/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                    onClick={handleSignIn}
+                  >
+                    Sign In
+                  </button>
                 </div>
+              </>
+              }
               </div>
             </div>
           </div>

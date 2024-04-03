@@ -1,28 +1,51 @@
-import React from 'react'
+import { data } from 'autoprefixer';
+import React, { useState, useEffect } from 'react'
 import { GiNetworkBars } from "react-icons/gi";
-
-const people = [
-  {
-    name: 'John Doe',
-    title: 'Front-end Developer',
-    department: 'Engineering',
-    email: 'john@devui.com',
-    role: 'Developer',
-    image:
-      'https://images.unsplash.com/photo-1628157588553-5eeea00af15c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1160&q=80',
-  },
-  {
-    name: 'Jane Doe',
-    title: 'Back-end Developer',
-    department: 'Engineering',
-    email: 'jane@devui.com',
-    role: 'CTO',
-    image:
-      'https://images.unsplash.com/photo-1639149888905-fb39731f2e6c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=928&q=80',
-  },
-]
+import {ref , onValue } from 'firebase/database' ;
+import { db, auth } from '../../firebase/firebase-config';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 
 function Database() {
+  const [tableData, setTableData] = useState([]);
+  const [recordsLen, setRecordsLen] = useState(0);
+
+  // const [user, setUser] = useState(null);
+  useEffect(() => {
+    // const userCredential = ;
+    const fetchData = async () => {
+      try {
+        // // Sign in with Firebase Authentication (replace with your preferred method)
+        // const currentUser = (await userCredential).user;
+        // setUser(currentUser);
+
+        // Fetch data from Firebase Realtime Database
+        const dbRef = ref(db, 'bharatdns/requests');
+        onValue(dbRef, (snapshot) => {
+          let records = [];
+          snapshot.forEach((childSnapshot) => {
+            let keyName = childSnapshot.key;
+            let data = childSnapshot.val();
+            records.push({ "key": keyName, "data": data });
+          });
+          records.reverse();
+          setRecordsLen(records.length)
+          setTableData(records);
+        });
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+  };
+  fetchData();
+
+    // Cleanup function to unsubscribe from real-time updates
+    return () => {
+      // Detach the listener when the component unmounts
+      // This will prevent memory leaks and unnecessary updates
+      // if the component is unmounted before the data fetch completes
+      const dbRef = ref(db, 'bharatdns/requests');
+      onValue(dbRef, null);
+    };
+  }, []);
   return (
     <>
       <section className="mx-auto w-full max-w-7xl px-4 py-4">
@@ -105,34 +128,49 @@ function Database() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-800 bg-gray-700">
-                    {people.map((person) => (
-                      <tr key={person.name}>
+                    {tableData.map((person, index) => (
+                      <tr key={index}>
+                        {/* Id */}
                         <td className="whitespace-nowrap px-4 py-4">
-                          <div className="flex items-center">
-                            <div className="h-10 w-10 flex-shrink-0">
-                              <img
-                                className="h-10 w-10 rounded-full object-cover"
-                                src={person.image}
-                                alt=""
-                              />
-                            </div>
-                            <div className="ml-4">
-                              <div className="text-sm font-medium text-gray-100">{person.name}</div>
-                              <div className="text-sm text-gray-300">{person.email}</div>
-                            </div>
-                          </div>
+                          <div className={`text-sm text-gray-100 bg-inherit px-2 rounded-full ${(person.data.resolved_ip == '0.0.0.0') ? " bg-red-300 text-red-900": ""}`}>{recordsLen - index}</div>
                         </td>
-                        <td className="whitespace-nowrap px-12 py-4">
-                          <div className="text-sm text-gray-100 ">{person.title}</div>
-                          <div className="text-sm text-gray-300">{person.department}</div>
-                        </td>
+                        {/* Query Name */}
                         <td className="whitespace-nowrap px-4 py-4">
-                          <span className="inline-flex rounded-full bg-green-300 px-2 text-xs font-semibold leading-5 text-green-900">
-                            Active
+                          <textarea className="text-sm px-2 py-2 text-gray-100 bg-inherit rounded-lg " value={person.data.query_name} readOnly></textarea>
+                        </td>
+                        {/* Resolved IP */}
+                        <td className="whitespace-nowrap px-4 py-4">
+                          <textarea className={`text-sm px-2 py-2 text-gray-100 bg-inherit rounded-lg `} value={person.data.resolved_ip} readOnly></textarea>
+                        </td>
+                        {/* Client Address */}
+                        <td className="whitespace-nowrap px-4 py-4">
+                          <div className="text-sm text-gray-100 bg-inherit ">{person.data.client_address[0]}, {person.data.client_address[1]}</div>
+                        </td>
+                        {/* Time */}
+                        <td className="whitespace-nowrap px-4 py-4">
+                          <div className="text-sm text-gray-100 bg-inherit ">{person.data.time} ms</div>
+                        </td>
+                        {/* Whitelist */}
+                        <td className="whitespace-nowrap px-4 py-4">
+                          <span className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${(person.data.whitelist)? "bg-green-300 text-green-900":"bg-red-300 text-red-900"}`}>
+                            {`${(person.data.whitelist) ? "Yes": "No"}`}
                           </span>
                         </td>
+                        {/* Blacklist */}
+                        <td className="whitespace-nowrap px-4 py-4">
+                          <span className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${(person.data.blacklist)? "bg-red-300 text-red-900":"bg-green-300 text-green-900"}`}>
+                          {`${(person.data.blacklist) ? "Yes": "No"}`}
+                          </span>
+                        </td>
+                        {/* Malicious */}
+                        <td className="whitespace-nowrap px-4 py-4">
+                          <span className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${(person.data.malicious)? "bg-red-300 text-red-900": "bg-green-300 text-green-900"}`}>
+                          {`${(person.data.malicious != 0) ? person.data.malicious.toFixed(2).toString()+ "%": "No"}`}
+                          </span>
+                        </td>
+                        {/* TimeElapsed */}
                         <td className="whitespace-nowrap px-4 py-4 text-sm text-gray-300">
-                          {person.role}
+                          {person.data.time_elapsed}
                         </td>
                       </tr>
                     ))}
