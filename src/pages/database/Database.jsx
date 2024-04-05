@@ -2,12 +2,21 @@ import React, { useState, useEffect } from 'react';
 import { GiNetworkBars } from "react-icons/gi";
 import { ref, onValue } from 'firebase/database';
 import { db } from '../../firebase/firebase-config';
+import { useAuth } from '../../contexts/authContext';
 
 function Database() {
   const [tableData, setTableData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [recordsLen, setRecordsLen] = useState(0);
+  const {userLoggedIn} = useAuth();
+
+  if(!userLoggedIn){
+    alert("Please sign in")
+  }
+  else{
+    alert("Welcome back")
+  }
 
   useEffect(() => {
     const fetchData = async () => {
