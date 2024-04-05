@@ -4,6 +4,7 @@ import './Signin.css'
 import { useAuth } from '../../contexts/authContext';
 import { Link, Navigate } from 'react-router-dom';
 import { doCreateUserWithEmaillAndPassword } from '../../firebase/auth';
+import dns_server_img from "../../assets/dns-glossary-header.jpg"
 
 function Signup() {
     const {userLoggedIn} = useAuth();
@@ -26,7 +27,7 @@ function Signup() {
   return (
     <>
     <section>
-    {userLoggedIn && (<Navigate to={'/'} replace={true} />)}
+    {userLoggedIn && (<Navigate to={'/bharatdns-frontend/'} replace={true} />)}
       <div className="grid grid-cols-1 lg:grid-cols-2">
         <div className="flex items-center justify-center px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-24">
           <div className="xl:mx-auto xl:w-full xl:max-w-sm 2xl:max-w-md">
@@ -35,7 +36,7 @@ function Signup() {
 						<p className="mt-2 text-base text-gray-400">
               Already have an account?{' '}
               <span className="font-medium text-white transition-all duration-200 hover:underline">
-                <Link to={'/signin'}>
+                <Link to={'/bharatdns-frontend/signin'}>
                   Sign In
                 </Link>
               </span>
@@ -154,7 +155,7 @@ function Signup() {
 				<div className="h-full w-full">
 					<img
 						className="cover-img mx-auto w-full rounded-md object-cover"
-						src="https://images.unsplash.com/photo-1559526324-4b87b5e36e44?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1742&q=80"
+						src={dns_server_img}
 						alt=""
 					/>
 				</div>

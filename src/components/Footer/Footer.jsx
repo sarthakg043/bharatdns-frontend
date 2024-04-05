@@ -1,6 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react'
 import { FaYoutube } from "react-icons/fa6";
+import logo from '../../assets/transparent bg_Bharat_DNS.png'
 
 function Footer() {
   return (
@@ -10,7 +11,7 @@ function Footer() {
           <div className="w-auto p-8">
             <a href="#">
               <div className="inline-flex items-center">
-                <img src='/transparent bg_Bharat_DNS.png' height={200} width={200} />
+                <img src={logo} height={200} width={200} />
                 <span className="ml-4 text-lg font-bold">Bharat DNS</span>
               </div>
             </a>

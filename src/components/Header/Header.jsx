@@ -6,10 +6,13 @@ import { Link} from "react-router-dom";
 import { useAuth } from '../../contexts/authContext';
 import { doSignOut } from '../../firebase/auth';
 import { useNavigate } from 'react-router-dom';
+import logo from '../../assets/transparent bg_Bharat_DNS.png'
+
+
 const menuItems = [
   {
     name: 'Home',
-    href: '/',
+    href: '/bharatdns-frontend/',
   },
 ]
 
@@ -26,14 +29,14 @@ function Header() {
   const handleSignOut = async () => {
     try {
       await doSignOut(); // Sign out the user
-      navigate('/signin'); // Redirect to the signing page
+      navigate('/bharatdns-frontend/signin'); // Redirect to the signing page
     } catch (error) {
       console.error('Error signing out:', error);
     }
   };
   
   const handleSignIn = async () => {
-    navigate('/signin')
+    navigate('/bharatdns-frontend/signin')
   };
 
 
@@ -42,7 +45,7 @@ function Header() {
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2 sm:px-6 lg:px-8">
         <div className="inline-flex items-center space-x-2">
           <span>
-            <img src='/transparent bg_Bharat_DNS.png' height={50} width={50} />
+            <img src={logo} height={50} width={50} />
           </span>
           <span className="font-bold">Bharat DNS</span>
         </div>
