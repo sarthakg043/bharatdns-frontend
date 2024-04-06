@@ -14,9 +14,6 @@ function Database() {
   if(!userLoggedIn){
     alert("Please sign in")
   }
-  else{
-    alert("Welcome back")
-  }
 
   useEffect(() => {
     const fetchData = async () => {
