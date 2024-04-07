@@ -10,7 +10,7 @@ import { AuthProvider } from './contexts/authContext'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-      <Route path='/bharatdns-frontend/' element={<Layout />}>
+      <Route path='/' element={<Layout />}>
         <Route path='' element={<Database />} />
         <Route path='signin' element={<Signin />} />
         <Route path='signup' element={<Signup />} />

@@ -12,7 +12,7 @@ import logo from '../../assets/transparent bg_Bharat_DNS.png'
 const menuItems = [
   {
     name: 'Home',
-    href: '/bharatdns-frontend/',
+    href: '/',
   },
 ]
 
@@ -29,14 +29,14 @@ function Header() {
   const handleSignOut = async () => {
     try {
       await doSignOut(); // Sign out the user
-      navigate('/bharatdns-frontend/signin'); // Redirect to the signing page
+      navigate('/signin'); // Redirect to the signing page
     } catch (error) {
       console.error('Error signing out:', error);
     }
   };
   
   const handleSignIn = async () => {
-    navigate('/bharatdns-frontend/signin')
+    navigate('/signin')
   };
 
 
@@ -100,7 +100,7 @@ function Header() {
                 <div className="flex items-center justify-between">
                   <div className="inline-flex items-center space-x-2">
                     <span className='bg-black rounded-full '>
-                      <img src='/transparent bg_Bharat_DNS.png' height={50} width={50} />
+                      <img src={logo} height={50} width={50} />
                     </span>
                     <span className="font-bold text-black text-xl">Bharat DNS</span>
                   </div>
