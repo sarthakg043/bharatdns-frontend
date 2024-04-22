@@ -61,8 +61,8 @@ function Database() {
 
   const renderPageNumbers = () => {
     const pages = [];
-    const numPageButtonsToShow = 9;
-    const maxPageButtons = 10;
+    const numPageButtonsToShow = 5;
+    const maxPageButtons = 6;
 
     let startPage;
     let endPage;
