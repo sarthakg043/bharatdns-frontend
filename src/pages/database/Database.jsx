@@ -88,7 +88,7 @@ function Database() {
         <button
           key={i}
           onClick={() => handlePageClick(i)}
-          className={`mx-1 flex items-center rounded-md border border-gray-600 px-3 py-1 text-gray-100 hover:scale-105 ${currentPage === i ? 'bg-gray-800' : ''}`}
+          className={`mx-1 flex items-center rounded-md border md:text-xs border-gray-600 px-3 py-1 text-gray-100 hover:scale-105 ${currentPage === i ? 'bg-gray-800' : ''}`}
         >
           {i}
         </button>
@@ -278,7 +278,7 @@ function Database() {
         </div>
         <div className="flex items-center justify-center pt-6">
           {/* Previous page button */}
-          <button onClick={handlePrevPage} disabled={currentPage === 1} className="mx-1 cursor-pointer text-sm font-semibold text-gray-100">
+          <button onClick={handlePrevPage} disabled={currentPage === 1} className="mx-1 cursor-pointer text-sm md:text-xs font-semibold text-gray-100">
             <span className="hidden lg:block">&larr; Previous</span>
             <span className="block lg:hidden">&larr;</span>
           </button>
